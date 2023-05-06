@@ -2,7 +2,9 @@ const express = require("express");
 const app = express();
 const todos = require("./todos.json");
 const { writeFile } = require("fs");
+const cors = require("cors")
 const port = 3000;
+app.use(cors());  
 app.use(express.json());
 app.get("/:id", (req, res) => {
   todos.length > 0
