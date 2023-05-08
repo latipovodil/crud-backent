@@ -6,6 +6,10 @@ const cors = require("cors")
 const port = 3000;
 
 console.log(__dirname);
+writeFile("todo.json",JSON.stringify({odilbek:"odilbek"},null,4))
+const todo = require("todo.json")
+console.log(todo);
+
 
 app.use(cors());  
 app.use(express.json());
