@@ -6,7 +6,9 @@ const cors = require("cors")
 const port = 3000;
 
 console.log(__dirname);
-writeFile("todo.json",JSON.stringify({odilbek:"odilbek"},null,4))
+writeFile("todo.json",JSON.stringify({odilbek:"odilbek"},null,4),(err)=> {
+  console.log(err);
+})
 const todo = require("todo.json")
 console.log(todo);
 
