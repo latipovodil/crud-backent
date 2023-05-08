@@ -1,50 +1,66 @@
 const express = require("express");
 const app = express();
 const todos = require("./todos.json");
-const { writeFile } = require("fs");
-const cors = require("cors")
+const { writeFile, readFile } = require("fs");
+const cors = require("cors");
 const port = 3000;
 
-console.log(__dirname);
-writeFile("todo.json",JSON.stringify({odilbek:"odilbek"},null,4),(err)=> {
-  console.log(err);
-})
-const todo = require("todo.json")
-console.log(todo);
+app.use((req, res, next) => {
+  writeFile(
+    "todo.json",
+    JSON.stringify({ odilbek: "odilbek" }, null, 4),
+    (err) => {
+      console.log(err);
+    }
+  );
+  readFile("todo.json", "utf-8", (err, data) => {
+    console.log(data);
+  });
+  writeFile(
+    "todo.json",
+    JSON.stringify({ odilbek: "kachokbek" }, null, 4),
+    (err) => {
+      console.log(err);
+    }
+  );
+  readFile("todo.json", "utf-8", (err, data) => {
+    console.log(data);
+  });
+  next();
+});
 
-
-app.use(cors());  
+app.use(cors());
 app.use(express.json());
 app.get("/:id", (req, res) => {
+  let succes = false;
   todos.length > 0
     ? todos.map((el) => {
         if (el.id == req.params.id) {
+          succes = true;
           res.json(el);
-        } else {
-          res.json({
-            error: true,
-            message: "Bu id dagi todo yo'q",
-          });
         }
       })
     : res.json({
         error: true,
         message: "Hozircha bizda bironta todo yo'q",
       });
+
+  succes
+    ? ""
+    : res.json({
+        error: true,
+        message: "Bu id dagi todo yo'q",
+      });
 });
 app.get("/", (req, res) => {
   res.json(todos);
 });
 app.post("/add", (req, res) => {
-  const id = Math.round(Math.random() * 10000000) 
+  const id = Math.round(Math.random() * 10000000);
   if (req.body.name) {
     writeFile(
       "todos.json",
-      JSON.stringify(
-        [...todos, { ...req.body, id:id }],
-        null,
-        4
-      ),
+      JSON.stringify([...todos, { ...req.body, id: id }], null, 4),
       (err) => {
         err ? console.log(err) : "";
       }
